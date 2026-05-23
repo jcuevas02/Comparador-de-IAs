@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Compass — Comparador de Inteligencias Artificiales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Karla:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #060b13;
+  --surface: #0d1420;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.15);
+  --text: #dde4f0;
+  --muted: #6b7a90;
+  --muted-2: #4a5568;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Karla', sans-serif;
+  font-size: 15px;
+  min-height: 100vh;
+}
+
+header {
+  padding: 5rem 2rem 3rem;
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+}
+
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.8rem, 6vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.1rem;
+  color: #eef2fa;
+}
+
+h1 em {
+  font-style: normal;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(200,215,245,0.35);
+}
+
+.subtitle {
+  font-size: 0.97rem;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 460px;
+  margin: 0 auto 1rem;
+}
+
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #eef2fa;
+}
+
+.stat-lbl {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.2rem;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.5rem 1.5rem 1.4rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-hover);
+}
+
+.card-top-line {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--c);
+  border-radius: 18px 18px 0 0;
+  opacity: 0.75;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
+.ai-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--c-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--c);
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--c-border);
+}
+
+.ai-info h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #eef2fa;
+  line-height: 1.2;
+}
+
+.company {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: var(--c-dim);
+  color: var(--c);
+  margin-top: 7px;
+  border: 1px solid var(--c-border);
+}
+
+.sep {
+  height: 1px;
+  background: var(--border);
+  margin: 0 0 1.1rem;
+}
+
+.use-label {
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  margin-bottom: 0.7rem;
+}
+
+.uses {
+  list-style: none;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 1.4rem;
+}
+
+.uses li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.875rem;
+  color: #a8b5cc;
+  line-height: 1.45;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--c);
+  margin-top: 5px;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border-hover);
+  border-radius: 10px;
+  color: var(--muted);
+  font-family: 'Karla', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  margin-top: auto;
+}
+
+.btn:hover {
+  background: var(--c-dim);
+  border-color: var(--c);
+  color: var(--c);
+}
+
+.btn-arrow {
+  font-size: 1rem;
+  transition: transform 0.15s;
+}
+
+.btn:hover .btn-arrow {
+  transform: translate(2px, -2px);
+}
+
+/* Per-AI color themes */
+.claude    { --c: #e8784a; --c-dim: rgba(232,120,74,0.1); --c-border: rgba(232,120,74,0.2); }
+.chatgpt   { --c: #19c37d; --c-dim: rgba(25,195,125,0.1); --c-border: rgba(25,195,125,0.2); }
+.gemini    { --c: #5b9af5; --c-dim: rgba(91,154,245,0.1); --c-border: rgba(91,154,245,0.2); }
+.grok      { --c: #94a3b8; --c-dim: rgba(148,163,184,0.1); --c-border: rgba(148,163,184,0.2); }
+.copilot   { --c: #8b80ec; --c-dim: rgba(139,128,236,0.1); --c-border: rgba(139,128,236,0.2); }
+.perplexity{ --c: #22d3d3; --c-dim: rgba(34,211,211,0.1); --c-border: rgba(34,211,211,0.2); }
+.mistral   { --c: #f0a830; --c-dim: rgba(240,168,48,0.1); --c-border: rgba(240,168,48,0.2); }
+.meta      { --c: #3b82f6; --c-dim: rgba(59,130,246,0.1); --c-border: rgba(59,130,246,0.2); }
+.deepseek  { --c: #c77dff; --c-dim: rgba(199,125,255,0.1); --c-border: rgba(199,125,255,0.2); }
+
+footer {
+  text-align: center;
+  padding: 1.5rem 2rem 2.5rem;
+  color: var(--muted-2);
+  font-size: 0.78rem;
+  border-top: 1px solid var(--border);
+  line-height: 1.7;
+}
+
+footer span {
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Guía de Herramientas · 2026</p>
+  <h1>Comparador de <em>IAs</em></h1>
+  <p class="subtitle">Encuentra la inteligencia artificial ideal para cada tarea. Compara capacidades, usos recomendados y accede directamente a cada plataforma.</p>
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-num">9</div>
+      <div class="stat-lbl">Plataformas</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">45+</div>
+      <div class="stat-lbl">Casos de uso</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">7</div>
+      <div class="stat-lbl">Empresas</div>
+    </div>
+  </div>
+</header>
+
+<div class="grid">
+
+  <!-- Claude -->
+  <div class="card claude">
+    <div class="card-top-line"></div>
+    <div class="card-header">
+      <div class="ai-icon">Cl</div>
+      <div class="ai-info">
+        <h2>Claude</h2>
+        <div class="company">Anthropic</div>
+        <span class="badge">Análisis · Escritura</span>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <p class="use-label">Ideal para</p>
+    <ul class="uses">
+      <li><span class="dot"></span>Redacción y edición de textos complejos</li>
+      <li><span class="dot"></span>Análisis de documentos y razonamiento profundo</li>
+      <li><span class="dot"></span>Programación y revisión de código</li>
+      <li><span class="dot"></span>Investigación y síntesis de información</li>
+      <li><span class="dot"></span>Conversaciones largas con contexto extendido</li>
+    </ul>
+    <a href="https://claude.ai" target="_blank" class="btn">
+      <span>Ir a claude.ai</span>
+      <span class="btn-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- ChatGPT -->
+  <div class="card chatgpt">
+    <div class="card-top-line"></div>
+    <div class="card-header">
+      <div class="ai-icon">GP</div>
+      <div class="ai-info">
+        <h2>ChatGPT</h2>
+        <div class="company">OpenAI</div>
+        <span class="badge">Uso General</span>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <p class="use-label">Ideal para</p>
+    <ul class="uses">
+      <li><span class="dot"></span>Tareas generales del día a día</li>
+      <li><span class="dot"></span>Generación de imágenes con DALL·E</li>
+      <li><span class="dot"></span>Herramientas y plugins de terceros</li>
+      <li><span class="dot"></span>Generación y depuración de código</li>
+      <li><span class="dot"></span>Búsqueda web en tiempo real</li>
+    </ul>
+    <a href="https://chatgpt.com" target="_blank" class="btn">
+      <span>Ir a chatgpt.com</span>
+      <span class="btn-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- Gemini -->
+  <div class="card gemini">
+    <div class="card-top-line"></div>
+    <div class="card-header">
+      <div class="ai-icon">Ge</div>
+      <div class="ai-info">
+        <h2>Gemini</h2>
+        <div class="company">Google DeepMind</div>
+        <span class="badge">Ecosistema Google</span>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <p class="use-label">Ideal para</p>
+    <ul class="uses">
+      <li><span class="dot"></span>Integración con Gmail, Drive y Docs</li>
+      <li><span class="dot"></span>Análisis multimodal (texto, imagen, audio)</li>
+      <li><span class="dot"></span>Búsquedas con información actualizada</li>
+      <li><span class="dot"></span>Productividad en Google Workspace</li>
+      <li><span class="dot"></span>Proyectos con Google Cloud</li>
+    </ul>
+    <a href="https://gemini.google.com" target="_blank" class="btn">
+      <span>Ir a gemini.google.com</span>
+      <span class="btn-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- Grok -->
+  <div class="card grok">
+    <div class="card-top-line"></div>
+    <div class="card-header">
+      <div class="ai-icon">Gr</div>
+      <div class="ai-info">
+        <h2>Grok</h2>
+        <div class="company">xAI</div>
+        <span class="badge">Tiempo Real · X</span>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <p class="use-label">Ideal para</p>
+    <ul class="uses">
+      <li><span class="dot"></span>Tendencias y noticias en X (Twitter)</li>
+      <li><span class="dot"></span>Respuestas sin filtros excesivos</li>
+      <li><span class="dot"></span>Análisis de redes sociales en vivo</li>
+      <li><span class="dot"></span>Consultas sobre eventos muy recientes</li>
+      <li><span class="dot"></span>Generación de imágenes con Aurora</li>
+    </ul>
+    <a href="https://grok.com" target="_blank" class="btn">
+      <span>Ir a grok.com</span>
+      <span class="btn-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- Copilot -->
+  <div class="card copilot">
+    <div class="card-top-line"></div>
+    <div class="card-header">
+      <div class="ai-icon">Co</div>
+      <div class="ai-info">
+        <h2>Copilot</h2>
+        <div class="company">Microsoft</div>
+        <span class="badge">Microsoft 365</span>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <p class="use-label">Ideal para</p>
+    <ul class="uses">
+      <li><span class="dot"></span>Integración con Word, Excel y PowerPoint</li>
+      <li><span class="dot"></span>Búsqueda web con Bing integrado</li>
+      <li><span class="dot"></span>Generación de imágenes con Designer</li>
+      <li><span class="dot"></span>Productividad en entornos empresariales</li>
+      <li><span class="dot"></span>Ecosistema Windows y Teams</li>
+    </ul>
+    <a href="https://copilot.microsoft.com" target="_blank" class="btn">
+      <span>Ir a copilot.microsoft.com</span>
+      <span class="btn-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- Perplexity -->
+  <div class="card perplexity">
+    <div class="card-top-line"></div>
+    <div class="card-header">
+      <div class="ai-icon">Px</div>
+      <div class="ai-info">
+        <h2>Perplexity</h2>
+        <div class="company">Perplexity AI</div>
+        <span class="badge">Búsqueda · Investigación</span>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <p class="use-label">Ideal para</p>
+    <ul class="uses">
+      <li><span class="dot"></span>Respuestas con citas y fuentes verificadas</li>
+      <li><span class="dot"></span>Investigación académica y técnica</li>
+      <li><span class="dot"></span>Resumen de artículos con referencias</li>
+      <li><span class="dot"></span>Sustituto avanzado del buscador tradicional</li>
+      <li><span class="dot"></span>Seguimiento de noticias recientes</li>
+    </ul>
+    <a href="https://perplexity.ai" target="_blank" class="btn">
+      <span>Ir a perplexity.ai</span>
+      <span class="btn-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- Mistral -->
+  <div class="card mistral">
+    <div class="card-top-line"></div>
+    <div class="card-header">
+      <div class="ai-icon">Mi</div>
+      <div class="ai-info">
+        <h2>Le Chat</h2>
+        <div class="company">Mistral AI</div>
+        <span class="badge">Open Source · Privacidad</span>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <p class="use-label">Ideal para</p>
+    <ul class="uses">
+      <li><span class="dot"></span>Usuarios que priorizan privacidad (Europa)</li>
+      <li><span class="dot"></span>Proyectos con modelos open source</li>
+      <li><span class="dot"></span>Programación y tareas técnicas</li>
+      <li><span class="dot"></span>Soporte multilingüe con énfasis en francés</li>
+      <li><span class="dot"></span>Alternativa ligera para autoalojar</li>
+    </ul>
+    <a href="https://chat.mistral.ai" target="_blank" class="btn">
+      <span>Ir a chat.mistral.ai</span>
+      <span class="btn-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- Meta AI -->
+  <div class="card meta">
+    <div class="card-top-line"></div>
+    <div class="card-header">
+      <div class="ai-icon">Ma</div>
+      <div class="ai-info">
+        <h2>Meta AI</h2>
+        <div class="company">Meta</div>
+        <span class="badge">Redes Sociales</span>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <p class="use-label">Ideal para</p>
+    <ul class="uses">
+      <li><span class="dot"></span>Uso integrado en WhatsApp, Instagram y Facebook</li>
+      <li><span class="dot"></span>Acceso gratuito sin cuenta adicional</li>
+      <li><span class="dot"></span>Generación de imágenes con Imagine</li>
+      <li><span class="dot"></span>Preguntas rápidas en contexto social</li>
+      <li><span class="dot"></span>Basado en Llama (open source)</li>
+    </ul>
+    <a href="https://www.meta.ai" target="_blank" class="btn">
+      <span>Ir a meta.ai</span>
+      <span class="btn-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- DeepSeek -->
+  <div class="card deepseek">
+    <div class="card-top-line"></div>
+    <div class="card-header">
+      <div class="ai-icon">Ds</div>
+      <div class="ai-info">
+        <h2>DeepSeek</h2>
+        <div class="company">DeepSeek AI</div>
+        <span class="badge">Código · Ciencia</span>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <p class="use-label">Ideal para</p>
+    <ul class="uses">
+      <li><span class="dot"></span>Programación avanzada y matemáticas</li>
+      <li><span class="dot"></span>Razonamiento paso a paso (modo Think)</li>
+      <li><span class="dot"></span>Alternativa económica para desarrolladores</li>
+      <li><span class="dot"></span>Tareas científicas y técnicas complejas</li>
+      <li><span class="dot"></span>Open source con rendimiento muy competitivo</li>
+    </ul>
+    <a href="https://chat.deepseek.com" target="_blank" class="btn">
+      <span>Ir a chat.deepseek.com</span>
+      <span class="btn-arrow">↗</span>
+    </a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Comparador de IAs · Actualizado en 2025<br>
+  <span>Las funcionalidades pueden variar según el plan de cada plataforma. Verifica precios y disponibilidad en cada sitio oficial.</span></p>
+</footer>
+
+</body>
+</html>
